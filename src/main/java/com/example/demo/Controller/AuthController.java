@@ -4,9 +4,9 @@ import com.example.demo.Config.ExceptionHandler;
 import com.example.demo.Models.User;
 import com.example.demo.Service.UserService;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.Logger;
 
-//import org.slf4j.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,8 +30,8 @@ public class AuthController {
     @Autowired
     private ApplicationContext applicationContext;
 
-    //  Logger logger = LoggerFactory.getLogger(AuthController.class);
-    Logger logger2 = LogManager.getLogger();
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
+//    Logger logger2 = LogManager.getLogger();
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -45,6 +45,11 @@ public class AuthController {
         try {
             userService.checkCredentials(email, password);
             User user = userService.getUserByEmail(email);
+
+            //test
+            userService.checkUserEmailAvailable(email);
+
+
             model.addAttribute("ValidId", user.getId());
             return "redirect:/homepage";
 
@@ -52,13 +57,12 @@ public class AuthController {
         } catch (ExceptionHandler exceptionHandler) {
 
 
-            model.addAttribute("error", applicationContext.getMessage(exceptionHandler.getCode(), new Object[]{}, Locale.forLanguageTag("RO")));
+            model.addAttribute("e", applicationContext.getMessage(exceptionHandler.getCode(), new Object[]{}, Locale.forLanguageTag("RO")));
 
-//            logger.info("this is a INFO type Log", exceptionHandler.getCode(), email);
-            logger2.debug("Debug message ");
+            logger.info("this is a INFO type Log", exceptionHandler.getCode(), email);
+            logger.error(exceptionHandler.getCode());
 
-
-            return "redirect:/login";
+            return "loginForm";
         }
 
     }

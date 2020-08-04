@@ -4,8 +4,24 @@
 <head>This is a login form!</head>
 
 <body>
-<c:if test="${not empty error}">
-    <div>Error: ${error}</div>
+<%--<c:catch var="e">--%>
+<%--    <c:set var="x" value="10" scope="page" />--%>
+
+<%--    <c:set var="y" value="five" scope="page" />--%>
+
+<%--    x divided by y is--%>
+<%--    <c:out value="${x/y}" />--%>
+
+<%--    <br />--%>
+<%--</c:catch>--%>
+<c:if test="${e!=null}">The caught exception is:
+
+    <p><c:out value="${e}"/></p>
+
 </c:if>
+
+
+
+
 </body>
 </html>

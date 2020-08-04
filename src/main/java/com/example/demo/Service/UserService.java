@@ -47,10 +47,11 @@ public class UserService {
 
     public User getById(long id) {
         Optional<User> user = userRepository.findById(id);
-        
+
         return ((User) user.get());
 
     }
+
 
     public User findByName(String name) {
         Optional<User> user = userRepository.findByLastnameIsLike(name);
@@ -87,12 +88,25 @@ public class UserService {
     public boolean checkCredentials(String email, String password) {
         String checkPassword = this.getUserByEmail(email).getPassword();
         String checkEmailAddress = this.getUserByEmail(email).getEmail();
-        if (checkEmailAddress.matches(email) && checkPassword.matches(password)){
+        if (checkEmailAddress.matches(email) && checkPassword.matches(password)) {
             return true;
         } else throw new ExceptionHandler("NoUser");
 
     }
-    
+
+    public boolean checkUserEmailAvailable(String email) {
+        if (!this.getUserByEmail(email).equals(null)) {
+            return true;
+        } else
+            throw new ExceptionHandler("EmailTaken");
+    }
+
+//    public boolean checkUserByNames(String firstName, String lastName){
+//        String fullName = firstName.concat(lastName);
+//        if(fullName.matches(getAllUsers()))
+//
+//    }
+
 
     public User getUserByEmail(String email) {
         Optional<User> user = userRepository.findUserByEmail(email);
@@ -106,7 +120,6 @@ public class UserService {
 //
 //        if(user.getPassword().matches(passwordPattern) || )
 //    }
-
 
 
 }
