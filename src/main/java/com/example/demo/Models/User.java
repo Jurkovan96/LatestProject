@@ -1,7 +1,10 @@
 package com.example.demo.Models;
 
+
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -20,6 +23,9 @@ public class User {
     @Column(name = "last_name")
     private String lastname;
 
+    @Column(name = "user_name")
+    private String username;
+
     @Column(name = "joined_date")
     private Timestamp dateadded;
 
@@ -28,11 +34,30 @@ public class User {
 
     @Column(name = "email")
     @Email
-    @NotEmpty(message =  "{email.invalid}")
+   // @NotBlank(message =  "{email.invalid}")
     private String email;
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "validation")
+    private boolean accountSet;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isAccountSet() {
+        return accountSet;
+    }
+
+    public void setAccountSet(boolean accountSet) {
+        this.accountSet = accountSet;
+    }
 
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Comments> commentsList;

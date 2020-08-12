@@ -5,8 +5,13 @@ import com.example.demo.Models.Comments;
 import com.example.demo.Models.User;
 import com.example.demo.Repository.CommentRepository;
 import com.example.demo.Repository.UserRepository;
+import com.example.demo.Security.MyUserDetails;
+import com.sun.xml.internal.ws.handler.HandlerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.ValidationException;
@@ -18,7 +23,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
 
     private final String userNamePattern = "^[aA-zZ]\\w{5,10}$";
@@ -40,6 +45,14 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
+
+    public boolean saveValidUser(User user) throws ValidationException {
+        if (checkUserEmailAvailable(user.getEmail())) {
+            this.saveUser(user);
+            return true;
+        } else throw new ValidationException("");
+    }
+
 
     public void deleteUser(long id) {
         userRepository.deleteById(id);
@@ -94,7 +107,7 @@ public class UserService {
 
     }
 
-    public boolean checkUserEmailAvailable(String email) {
+    public boolean checkUserEmailAvailable(String email) throws HandlerException {
         if (!this.getUserByEmail(email).equals(null)) {
             return true;
         } else
@@ -104,13 +117,22 @@ public class UserService {
 //    public boolean checkUserByNames(String firstName, String lastName){
 //        String fullName = firstName.concat(lastName);
 //        if(fullName.matches(getAllUsers()))
-//
+// 
 //    }
 
 
     public User getUserByEmail(String email) {
         Optional<User> user = userRepository.findUserByEmail(email);
         return ((User) user.get());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws ExceptionHandler {
+        Optional<User> user = userRepository.findUserByEmail(email);
+
+        user.orElseThrow(() -> new ExceptionHandler("email"));
+
+        return user.map(MyUserDetails::new).get();
     }
 
 

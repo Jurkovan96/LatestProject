@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Config.ExceptionHandler;
 import com.example.demo.Models.User;
 import com.example.demo.Service.UserService;
+import com.sun.xml.internal.ws.handler.HandlerException;
 import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,7 +33,6 @@ public class AuthController {
     private ApplicationContext applicationContext;
 
     Logger logger = LoggerFactory.getLogger(AuthController.class);
-//    Logger logger2 = LogManager.getLogger();
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -45,11 +46,6 @@ public class AuthController {
         try {
             userService.checkCredentials(email, password);
             User user = userService.getUserByEmail(email);
-
-            //test
-            userService.checkUserEmailAvailable(email);
-
-
             model.addAttribute("ValidId", user.getId());
             return "redirect:/homepage";
 
@@ -61,6 +57,9 @@ public class AuthController {
 
             logger.info("this is a INFO type Log", exceptionHandler.getCode(), email);
             logger.error(exceptionHandler.getCode());
+            logger.info("User not found!");
+//            logger.info("");
+
 
             return "loginForm";
         }
@@ -71,7 +70,6 @@ public class AuthController {
     public String doDisplayHomePage(Model model) {
         long id = (long) model.getAttribute("ValidId");
         model.addAttribute("user", userService.getById(id));
-
         return "homePageForm";
     }
 
@@ -83,14 +81,24 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String doDisplayRegister(Model model) {
-        model.addAttribute(new User());
+        model.addAttribute("user", new User());
         return "registerForm";
     }
-
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void doRegister(@ModelAttribute User user) {
-
-    }
+//
+//    @RequestMapping(value = "/register", method = RequestMethod.POST)
+//    public String doRegister(@ModelAttribute User user, Model model) {
+//        try {
+//            //test
+//            userService.saveUser(user);
+//            model.addAttribute("ValidId", user.getId());
+//            return "redirect:/homepage";
+//        } catch (ExceptionHandler exception) {
+//
+//            model.addAttribute("e", applicationContext.getMessage(exception.getCode(), new Object[]{}, Locale.forLanguageTag("RO")));
+//        }
+//
+//
+//    }
 
 
 }
