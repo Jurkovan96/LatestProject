@@ -23,7 +23,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String getHomePage(HttpSession httpSession, Model model, @ModelAttribute User user) {
-     httpSession.getId();
+        httpSession.getId();
         System.out.printf(httpSession.getId());
         model.addAttribute("numId", httpSession.getId());
         model.addAttribute("user", user.getId());
