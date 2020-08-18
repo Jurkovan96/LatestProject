@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+
 @Controller
 @SessionAttributes("LoggedUsr")
 public class AthController {
@@ -20,7 +21,8 @@ public class AthController {
 
 
     @RequestMapping(value = "/someplace", method = RequestMethod.GET)
-    public String doTheSomePage() {
+    public String doTheSomePage(Model model) {
+        model.addAttribute("user", model.getAttribute("LoggedUsr").toString());
 
         return "pageForm";
     }

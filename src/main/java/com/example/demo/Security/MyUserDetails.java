@@ -13,35 +13,26 @@ import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
-    private String email;
-    private boolean accountEn;
-    private List<GrantedAuthority> grantedAuthorityList;
-
+    private User user;
 
     public MyUserDetails(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.email = user.getEmail();
-        this.accountEn = user.isAccountSet();
-        this.grantedAuthorityList = Arrays.stream(user.getRole().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        this.user = user;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorityList;
+        return Arrays.stream(user.getRole().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
 
     @Override
@@ -61,6 +52,10 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return accountEn;
+        return user.isAccountSet();
+    }
+
+    public Long getId() {
+        return user.getId();
     }
 }

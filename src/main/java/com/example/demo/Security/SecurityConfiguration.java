@@ -29,16 +29,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").permitAll()
+                .loginPage("/login")
+                .permitAll()
                 .defaultSuccessUrl("/someplace", true).and()
                 .logout()//default logout handling
                 .logoutSuccessUrl("/login?logout")//our new logout success url, we are not replacing other defaults.
-                .permitAll();//allow all as it will be accessed when user is not logged in anymore
+                .permitAll()//allow all as it will be accessed when user is not logged in anymore
+                .and()
+                .rememberMe()
+                .alwaysRemember(true);//
 
 
     }

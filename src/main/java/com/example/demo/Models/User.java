@@ -1,7 +1,6 @@
 package com.example.demo.Models;
 
 
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +12,8 @@ import java.util.List;
 @Entity(name = "users")
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private long id;
 
@@ -34,7 +34,7 @@ public class User {
 
     @Column(name = "email")
     @Email
-   // @NotBlank(message =  "{email.invalid}")
+    // @NotBlank(message =  "{email.invalid}")
     private String email;
 
     @Column(name = "password")
@@ -124,5 +124,21 @@ public class User {
 
     public void setCommentsList(List<Comments> commentsList) {
         this.commentsList = commentsList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", username='" + username + '\'' +
+                ", dateadded=" + dateadded +
+                ", role='" + role + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", accountSet=" + accountSet +
+                ", commentsList=" + commentsList +
+                '}';
     }
 }
